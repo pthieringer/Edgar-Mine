@@ -5,7 +5,7 @@ output:
     df_print: paged
 ---
 
-#Installation
+#Installation and Setup
 
 Start off by installing and loading necessary packages for amplicon analysis.
 
@@ -32,15 +32,12 @@ set.seed(100)
 Define the path variable so it points to the correct directory. Set the working directory first and then define the folder to work in.
 
 ```{r}
-miseq_path <- "~/Documents/Microbes/Edgar Mine/Analysis of Summer 2019/Trimmed_Barcodes"
+miseq_path <- "~/Edgar-Mine/Demultiplexed Files"
 list.files(miseq_path)
 ```
 
 
-
-
-
-FILTER + TRIM
+# FILTER + TRIM
 
 Filtering out low quality sequence reads by looking at quality scores. Also use FASTQC to check which files are good to use for the data and where to trim.
 
