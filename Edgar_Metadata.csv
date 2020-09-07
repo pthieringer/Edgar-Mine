@@ -1,0 +1,29 @@
+SampleID,Hole_Collected_From,Site_Collected_From,Collection_date,Days_Since_Initial_Extraction,Days_Since_Previous_Extraction,Total_Volume_mL,Season
+EM2004,2,Borehole 2,2017-10-24,326,246,1500,Fall
+EM2005,2,Borehole 2,2018-10-10,677,351,1380,Fall
+EM2006,2,Borehole 2,2018-10-10,677,351,420,Fall
+EM2007,2,Borehole 2,2018-11-16,714,37,1020,Winter
+EM2008,2,Borehole 2,2018-11-16,714,37,1297,Winter
+EM2009,2,Borehole 2,2019-06-21,931,217,2400,Summer
+EM2010,2,Borehole 2,2019-07-08,948,17,1420,Summer
+EM2011,2,Borehole 2,2019-07-25,967,19,1245,Summer
+EM2012,2,Borehole 2,2020-06-24,1303,336,2550,Summer
+EM3001,3,Borehole 3,2018-10-10,677,351,31,Fall
+EM3002,3,Borehole 3,2018-11-16,714,37,40,Winter
+EM3003,3,Borehole 3,2019-06-21,931,217,323,Summer
+EM3004,3,Borehole 3,2019-07-08,948,17,720,Summer
+EM3005,3,Borehole 3,2019-07-25,967,19,420,Summer
+EM3006,3,Borehole 3,2020-06-24,1303,336,420,Summer
+EM6001,6,Borehole 6,2018-10-10,677,351,25,Fall
+EM6002,6,Borehole 6,2020-06-24,1303,623,60,Summer
+EM8001,8,Borehole 8,2018-10-10,677,351,145,Fall
+EM8002,8,Borehole 8,2018-11-16,714,37,210,Winter
+EM8003,8,Borehole 8,2019-06-21,931,217,107,Summer
+EM8004,8,Borehole 8,2020-06-24,1303,368,60,Summer
+EMS001,1,Soil Above Central Tunnel,2017-06-24,184,1,0.75,Summer
+EMS002,1,Soil Above Central Tunnel,2017-06-24,184,1,0.75,Summer
+EMS003,1,Soil Above Central Tunnel,2017-06-24,184,1,0.75,Summer
+EMS004,1,Soil Above Central Tunnel,2017-06-24,184,1,0.75,Summer
+EMS005,1,Soil Above Miami Tunnel,2017-06-24,184,1,0.75,Summer
+EMS006,1,Soil Above Miami Tunnel,2017-06-24,184,1,0.75,Summer
+EMG001,1,Stream from Central Tunnel,2017-06-24,184,1,0.75,Summer
