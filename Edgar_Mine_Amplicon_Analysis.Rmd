@@ -150,21 +150,17 @@ head(track)
 # ASSIGNING TAXONOMY
 
 Using formatted databases to assign taxonomy to samples and sequences
-
 ```{r}
 #Depending on your work directory this may need to change
-fastaRef <- "~/Documents/Microbes/Edgar Mine/Analysis of Summer 2019/silva_nr_v132_train_set.fa"
+fastaRef <- "~/Edgar-Mine/silva_nr_v138_train_set.fa"
 taxTab <- assignTaxonomy(seqtabNoC, refFasta = fastaRef, multithread = TRUE)
 unname(head(taxTab))
 ```
 
 
-
-
-CONSTRUCT PHYLOGENETIC TREE
+##CONSTRUCT PHYLOGENETIC TREE
 
 DADA2 makes a reference free analysis of phylogeny
-
 ```{r}
 seqs <- getSequences(seqtabNoC)
 names(seqs) <- seqs
@@ -185,16 +181,15 @@ detach("package:phangorn", unload=TRUE)
 
 
 
-
-COMBINE DATA INTO PHYLOSEQ OBJECT
+# COMBINE DATA INTO PHYLOSEQ OBJECT
 
 This step uses the Phyloseq package to combine all of the data associated with the samples into a single object that can be manipulated to observe amplicon data. The metadata file needs to be contained as a ".csv". 
 ```{r}
-samdf <- read.csv("~/Documents/Microbes/Edgar Mine/Analysis of Summer 2019/Edgar_Summer2019_Metadata.csv",header=TRUE)
+samdf <- read.csv("~/Edgar-Mine/Edgar_Metadata.csv",header=TRUE)
 all(rownames(seqtabAll) %in% samdf$SampleID) #should come out TRUE
 ```
 
-Create,and keep, the columns for all of the metadata variables. Need to list each of the variables in the keep.cols section.
+Create and keep the columns for all of the metadata variables. Need to list each of the variables in the keep.cols section.
 ```{r}
 rownames(samdf) <- samdf$SampleID
 keep.cols <- c("SampleID", "Borehole", "Collection_Date", "Days_Since_Previous_Extraction", "Total_Volume_Extracted_mL", "DO", "pH", "Temperature", "F", "Cl", "SO4")
@@ -211,8 +206,7 @@ ps
 
 
 
-
-USING PHYLOSEQ
+# USING PHYLOSEQ
 
 Can first create a table to view the number of observed counts for each phylum. This is a good chance to observe if there are small counts to filter out, but if working with low biomass, may be good to keep most things in.
 ```{r}
@@ -274,10 +268,9 @@ ps2 = prune_taxa(keepTaxa, ps)
 
 
 
-ANALYSIS OF PHYLOSEQ OBJECT AND METADATA
+# ANALYSIS OF PHYLOSEQ OBJECT AND METADATA
 
-
-SPECIES RICHNESS AND DIVERSITY - ALPHA DIVERSITY
+## SPECIES RICHNESS AND DIVERSITY - ALPHA DIVERSITY
 
 Begin by looking at the Shannon and Simpson Diversity (measures of ...). Change "x" to the variable to plot by, and color by a distinct variable as well.
 ```{r}
@@ -285,7 +278,7 @@ plot_richness(ps2, x="Borehole", measures=c("Shannon", "Simpson"), color="Days_S
 ```
 
 
-BETA DIVERSITY
+## BETA DIVERSITY
 
 Going to follow two ways of ordination by transforming the sample counts as a part of the workflow by Callahan et al. (2017) and rarefying the samples, as well as a Hellinger transformation for the rarefied samples. Each will be used in each ordination plot to observe any differences and/or unique distinctions.
 
@@ -333,7 +326,7 @@ ps_rare_hell <- vegan_stand(ps_rare, method = "hellinger")
 
 
 
-NMDS Ordination
+## NMDS Ordination
 
 ```{r}
 #For regular microbiome workflow without rarifaction and hellinger transformation
@@ -349,7 +342,7 @@ plot_ordination(ps_rare_hell, ord.nmds.bray, type = "samples", color= "Collectio
 
 
 
-CCA Ordination
+## CCA Ordination
 
 First going to do a log transformation as denoted in the microbiome workflow for conducting a CCA analysis. Will also use the rarified Hellinger transformed object as well.
 ```{r}
@@ -372,7 +365,7 @@ ps_rare_cca
 
 
 
-MINIMUM SPANNING TREE
+## MINIMUM SPANNING TREE
 
 This test can show how a variable plays into grouping of samples.
 ```{r}
@@ -417,9 +410,7 @@ plot_cca(ps_rare, grouping_column = "Borehole",
 
 
 
-
-
-BAR PLOTS
+# BAR PLOTS
 
 This is a way to visulaize the key players in the samples. Can visulaize the top 20 (or other number - would only go to top 40) of taxa to deep dive on specific microbes. Also need to play around with the x variable to understand correlations.
 
@@ -450,10 +441,7 @@ Deeper analysis and formatting
 
 
 
-
-
-
-AMPVIS 2 VISUALIZATIONS
+# AMPVIS 2 VISUALIZATIONS
 These include heatmaps, boxplots, and some ordinations.
 
 First must include the rarified phyloseq object with an appropriate number for the best determined lowest sample size. 
@@ -535,9 +523,7 @@ amp_timeseries(AalborgWWTPs,
 
 
 
-
-ANOVA AND ANOISM TEST
-
+# ANOVA AND ANOISM TEST
 
 To keep the metadata use the "samdf" object previously made from creating the phyloseq object.
 ```{r}
