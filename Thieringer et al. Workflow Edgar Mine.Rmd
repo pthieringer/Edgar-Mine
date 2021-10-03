@@ -1,0 +1,552 @@
+---
+title: "Thieringer et al. Edgar Mine Workflow for 16S Data and Geochemistry"
+output:
+  html_document:
+    df_print: paged
+---
+
+# 16S Amplicon Analysis
+
+#### Saved text of sessionInfo() as well as the packages used in the submission of this manuscript
+
+R version 4.0.2 (2020-06-22)
+Platform: x86_64-apple-darwin17.0 (64-bit)
+Running under: macOS  10.16
+
+Matrix products: default
+LAPACK: /Library/Frameworks/R.framework/Versions/4.0/Resources/lib/libRlapack.dylib
+
+locale:
+[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+
+attached base packages:
+[1] stats4    parallel  stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+ [1] ggpubr_0.4.0                lubridate_1.7.9.2           ggthemr_1.1.0               scales_1.1.1                QsRutils_0.1.4             
+ [6] vegan_2.5-7                 lattice_0.20-41             permute_0.9-5               ampvis2_2.6.5               phyloseqGraphTest_0.1.0    
+[11] phylosmith_1.0.5            devtools_2.3.2              usethis_2.0.0               DESeq2_1.28.1               SummarizedExperiment_1.18.2
+[16] DelayedArray_0.14.1         matrixStats_0.57.0          Biobase_2.50.0              GenomicRanges_1.40.0        GenomeInfoDb_1.24.2        
+[21] knitr_1.30                  phangorn_2.5.5              ape_5.5                     DECIPHER_2.16.1             RSQLite_2.2.2              
+[26] Biostrings_2.58.0           XVector_0.30.0              IRanges_2.24.1              S4Vectors_0.28.1            BiocGenerics_0.36.0        
+[31] phyloseq_1.34.0             dada2_1.16.0                Rcpp_1.0.6                  gridExtra_2.3               ggplot2_3.3.3              
+[36] BiocManager_1.30.10        
+
+loaded via a namespace (and not attached):
+  [1] utf8_1.2.1               tidyselect_1.1.1         AnnotationDbi_1.50.3     htmlwidgets_1.5.3        grid_4.0.2              
+  [6] BiocParallel_1.22.0      Rtsne_0.15               munsell_0.5.0            codetools_0.2-18         units_0.6-7             
+ [11] withr_2.4.2              colorspace_2.0-1         rstudioapi_0.13          ggsignif_0.6.0           labeling_0.4.2          
+ [16] GenomeInfoDbData_1.2.3   hwriter_1.3.2            polyclip_1.10-0          bit64_4.0.5              farver_2.1.0            
+ [21] rhdf5_2.34.0             rprojroot_2.0.2          vctrs_0.3.8              generics_0.1.0           xfun_0.23               
+ [26] R6_2.5.0                 doParallel_1.0.16        graphlayouts_0.7.1       locfit_1.5-9.4           bitops_1.0-7            
+ [31] rhdf5filters_1.2.0       assertthat_0.2.1         ggraph_2.0.4             gtable_0.3.0             multcompView_0.1-8      
+ [36] processx_3.5.2           tidygraph_1.2.0          rlang_0.4.11             genefilter_1.70.0        splines_4.0.2           
+ [41] rstatix_0.6.0            lazyeval_0.2.2           broom_0.7.3              abind_1.4-5              yaml_2.2.1              
+ [46] reshape2_1.4.4           backports_1.2.1          ggnetwork_0.5.8          tools_4.0.2              ellipsis_0.3.2          
+ [51] biomformat_1.16.0        RColorBrewer_1.1-2       sessioninfo_1.1.1        ggnet_0.1.0              plyr_1.8.6              
+ [56] progress_1.2.2           zlibbioc_1.36.0          classInt_0.4-3           purrr_0.3.4              RCurl_1.98-1.2          
+ [61] ps_1.6.0                 prettyunits_1.1.1        viridis_0.6.1            haven_2.3.1              ggrepel_0.9.0           
+ [66] cluster_2.1.0            fs_1.5.0                 tinytex_0.28             magrittr_2.0.1           data.table_1.14.0       
+ [71] openxlsx_4.2.3           pkgload_1.1.0            hms_1.1.0                patchwork_1.1.1          evaluate_0.14           
+ [76] xtable_1.8-4             XML_3.99-0.5             rio_0.5.16               jpeg_0.1-8.1             readxl_1.3.1            
+ [81] testthat_3.0.1           compiler_4.0.2           tibble_3.1.2             KernSmooth_2.23-18       crayon_1.4.1            
+ [86] htmltools_0.5.1.1        mgcv_1.8-33              tidyr_1.1.3              geneplotter_1.66.0       RcppParallel_5.0.2      
+ [91] DBI_1.1.0                tweenr_1.0.1             MASS_7.3-53              sf_0.9-7                 car_3.0-10              
+ [96] ShortRead_1.46.0         Matrix_1.3-2             ade4_1.7-16              cli_2.5.0                quadprog_1.5-8          
+[101] igraph_1.2.6             forcats_0.5.0            pkgconfig_2.0.3          GenomicAlignments_1.24.0 foreign_0.8-81          
+[106] plotly_4.9.3             foreach_1.5.1            annotate_1.66.0          multtest_2.46.0          stringr_1.4.0           
+[111] callr_3.7.0              digest_0.6.27            rmarkdown_2.6            cellranger_1.1.0         fastmatch_1.1-0         
+[116] curl_4.3.1               Rsamtools_2.4.0          lifecycle_1.0.0          nlme_3.1-151             jsonlite_1.7.2          
+[121] Rhdf5lib_1.12.0          carData_3.0-4            network_1.16.1           desc_1.2.0               viridisLite_0.4.0       
+[126] fansi_0.5.0              pillar_1.6.1             httr_1.4.2               pkgbuild_1.2.0           survival_3.2-7          
+[131] glue_1.4.2               remotes_2.2.0            zip_2.1.1                png_0.1-7                iterators_1.0.13        
+[136] bit_4.0.4                ggforce_0.3.2            class_7.3-17             stringi_1.6.2            blob_1.2.1              
+[141] latticeExtra_0.6-29      memoise_1.1.0            dplyr_1.0.6              e1071_1.7-4 
+
+#### Reading in the phyloseq objects to use downstream
+```{r}
+em_ps <- readRDS("em_phyloseq_object.rds") #This contains the cleaned phyloseq object. The "uncleaned_em_phyloseq_object" contains the ASVs from the blank samples that are potential contaminants.
+```
+
+#### Removing sample EM3004 because there were no sequences that were generated/merged after creating the phyloseq object
+```{r}
+em_ps <- subset_samples(em_ps, sample_names(em_ps) != "EM3004")
+em_ps <- subset_samples(em_ps, sample_names(em_ps) != "EM2006")
+em_ps <- subset_samples(em_ps, sample_names(em_ps) != "EM2009")
+em_ps <- subset_samples(em_ps, sample_names(em_ps) != "EM2011")
+```
+
+#### Rarefaction of the original phyloseq object to the next lowest sample in order to include as many samples as possible while maintaining enough reads
+```{r}
+em_ps_rare <- rarefy_even_depth(em_ps, sample.size = 1721, rngseed = 700) #A sample size of 5,761 is used when looking only at borehole samples. The current sample size includes the soil samples observed in this study and to produce the PCOA and NMDS plots.
+```
+
+```{r}
+em_ps_rare_boreholes <- rarefy_even_depth(em_ps, sample.size = 3347, rngseed = 700)
+```
+
+
+### PCOA Ordination Figure Creation
+```{r}
+ord.pcoa.wunifrac <- ordinate(em_ps_rare, method = "PCoA", distance = "unifrac", weighted = TRUE)
+PCOA_plot <- plot_ordination(em_ps_rare, ord.pcoa.wunifrac, type = "samples", color = "Site_Collected_From", label = NULL) +
+  geom_point(size = 6) +
+  stat_ellipse(type = "norm") +
+  labs(color = "Sample Source") +
+  scale_color_manual(values = c("#0072B2", "#F0E442", "#D55E00", "#CC79A7", "#E69F00", "#000000"))
+  #ggthemr('flat') #Add this at the beginning of this code chunk to match the aesthetics of the plot in the manuscript. To reset the palette for the additional figures use the function ggthemr_reset()
+PCOA_plot
+```
+
+
+#### Using Hellinger transformation in order to observe NMDS ordination
+
+```{r}
+ps_prop <- transform_sample_counts(em_ps, function(otu) otu/sum(otu))
+ps_prop_hell <- vegan_stand(ps_prop, method = "hellinger")
+```
+
+
+### NMDS Ordination Supplemental Figure Creation
+```{r}
+ord.nmds.bray <- ordinate(ps_prop_hell, method="NMDS", distance="bray")
+em_nmds_days_since_previous <- plot_ordination(ps_prop, ord.nmds.bray, type = "samples", color= "Days_Since_Previous_Extraction", shape = "Site_Collected_From", title="Bray NMDS") +
+  geom_point(size = 5) +
+  labs(shape = "Sample Source", color = "Days Since Previous Extraction") +
+  scale_shape_manual(values = c(15, 16, 17, 18, 23, 24, 25)) +
+  theme_bw()
+em_nmds_days_since_previous
+```
+
+
+#### Adonis Test
+```{r}
+edgar_bray <- phyloseq::distance(em_ps_rare, method = "bray")
+edgardf <- data.frame(sample_data(em_ps_rare))
+
+adonis(edgar_bray ~ Site_Collected_From, data = edgardf) #Can change the variable of interest to one observed in the study
+```
+
+### Rarefaction Curves
+```{r}
+em_otu <- otu_table(em_ps)
+
+rarecurve(em_otu)
+```
+
+
+#### Formatting data to fit into Ampvis2 for heatmap visualization
+
+```{r}
+em_ps_b23 <- em_ps_cleaned
+
+em_ps_b23 <- subset_samples(em_ps_b23, sample_names(em_ps_b23) != "EMG001") 
+em_ps_b23 <- subset_samples(em_ps_b23, sample_names(em_ps_b23) != "EMS001")
+em_ps_b23 <- subset_samples(em_ps_b23, sample_names(em_ps_b23) != "EMS002")
+em_ps_b23 <- subset_samples(em_ps_b23, sample_names(em_ps_b23) != "EMS003")
+em_ps_b23 <- subset_samples(em_ps_b23, sample_names(em_ps_b23) != "EMS004")
+em_ps_b23 <- subset_samples(em_ps_b23, sample_names(em_ps_b23) != "EMS005")
+em_ps_b23 <- subset_samples(em_ps_b23, sample_names(em_ps_b23) != "EMS006")
+em_ps_b23 <- subset_samples(em_ps_b23, sample_names(em_ps_b23) != "EM6001")
+em_ps_b23 <- subset_samples(em_ps_b23, sample_names(em_ps_b23) != "EM6002")
+em_ps_b23 <- subset_samples(em_ps_b23, sample_names(em_ps_b23) != "EM8001")
+em_ps_b23 <- subset_samples(em_ps_b23, sample_names(em_ps_b23) != "EM8002")
+em_ps_b23 <- subset_samples(em_ps_b23, sample_names(em_ps_b23) != "EM8003")
+em_ps_b23 <- subset_samples(em_ps_b23, sample_names(em_ps_b23) != "EM8004")
+sample_sums(em_ps_b23) #There should be a total of 11 samples
+```
+
+```{r}
+#Removing all samples belonging to Boreholes 2 + 3
+em_ps_b68soils <- subset_samples(em_ps, sample_names(em_ps) != "EM2004")
+em_ps_b68soils <- subset_samples(em_ps_b68soils, sample_names(em_ps_b68soils) != "EM2005")
+em_ps_b68soils <- subset_samples(em_ps_b68soils, sample_names(em_ps_b68soils) != "EM2007")
+em_ps_b68soils <- subset_samples(em_ps_b68soils, sample_names(em_ps_b68soils) != "EM2008")
+em_ps_b68soils <- subset_samples(em_ps_b68soils, sample_names(em_ps_b68soils) != "EM2010")
+em_ps_b68soils <- subset_samples(em_ps_b68soils, sample_names(em_ps_b68soils) != "EM2012")
+em_ps_b68soils <- subset_samples(em_ps_b68soils, sample_names(em_ps_b68soils) != "EM3001")
+em_ps_b68soils <- subset_samples(em_ps_b68soils, sample_names(em_ps_b68soils) != "EM3002")
+em_ps_b68soils <- subset_samples(em_ps_b68soils, sample_names(em_ps_b68soils) != "EM3003")
+em_ps_b68soils <- subset_samples(em_ps_b68soils, sample_names(em_ps_b68soils) != "EM3005")
+em_ps_b68soils <- subset_samples(em_ps_b68soils, sample_names(em_ps_b68soils) != "EM3006")
+em_ps_b68soils <- subset_samples(em_ps_b68soils, sample_names(em_ps_b68soils) != "Blank1")
+em_ps_b68soils <- subset_samples(em_ps_b68soils, sample_names(em_ps_b68soils) != "Blank2")
+em_ps_b68soils <- subset_samples(em_ps_b68soils, sample_names(em_ps_b68soils) != "EMG001")
+sample_sums(em_ps_b68soils) #There should be a total of 12 samples
+```
+
+```{r}
+em_ps_b68 <- subset_samples(em_ps_b68soils, sample_names(em_ps_b68soils) != "EMS001")
+em_ps_b68 <- subset_samples(em_ps_b68, sample_names(em_ps_b68) != "EMS002")
+em_ps_b68 <- subset_samples(em_ps_b68, sample_names(em_ps_b68) != "EMS003")
+em_ps_b68 <- subset_samples(em_ps_b68, sample_names(em_ps_b68) != "EMS004")
+em_ps_b68 <- subset_samples(em_ps_b68, sample_names(em_ps_b68) != "EMS005")
+em_ps_b68 <- subset_samples(em_ps_b68, sample_names(em_ps_b68) != "EMS006")
+sample_sums(em_ps_b68) #There should be a total of 6
+```
+
+```{r}
+em_ps_soils <- subset_samples(em_ps_b68soils, sample_names(em_ps_b68soils) != "EM6001")
+em_ps_soils <- subset_samples(em_ps_soils, sample_names(em_ps_soils) != "EM6002")
+em_ps_soils <- subset_samples(em_ps_soils, sample_names(em_ps_soils) != "EM8001")
+em_ps_soils <- subset_samples(em_ps_soils, sample_names(em_ps_soils) != "EM8002")
+em_ps_soils <- subset_samples(em_ps_soils, sample_names(em_ps_soils) != "EM8003")
+em_ps_soils <- subset_samples(em_ps_soils, sample_names(em_ps_soils) != "EM8004")
+sample_sums(em_ps_soils) #There should be a total of 6
+```
+
+```{r}
+em_ps_b23@sam_data$Collection_date <- as.Date(em_ps_b23@sam_data$Collection_date, "%m/%d/%y")
+
+em_ps_b68@sam_data$Collection_date <- as.Date(em_ps_b68@sam_data$Collection_date, "%m/%d/%y")
+
+em_ps_soils@sam_data$Collection_date <- as.Date(em_ps_soils@sam_data$Collection_date, "%m/%d/%y")
+```
+
+
+```{r}
+obj <- em_ps_b23
+t_otu <- t(data.frame(otu_table(obj)))
+myotutable <- data.frame(OTU = rownames(t_otu@.Data),
+                       t_otu@.Data,
+                       phyloseq::tax_table(obj)@.Data,
+                       check.names = FALSE
+                       )
+myotutable$Species <- NA
+mymetadata <- data.frame(phyloseq::sample_data(obj), 
+                       check.names = FALSE
+                       )
+edgar_ampvis2_obj <- amp_load(otutable = myotutable, metadata = mymetadata)
+```
+
+
+```{r}
+obj2 <- em_ps_b68
+t_otu2 <- t(data.frame(otu_table(obj2)))
+myotutabl2e <- data.frame(OTU = rownames(t_otu2@.Data),
+                       t_otu2@.Data,
+                       phyloseq::tax_table(obj2)@.Data,
+                       check.names = FALSE
+                       )
+myotutable2$Species <- NA
+mymetadata2 <- data.frame(phyloseq::sample_data(obj2), 
+                       check.names = FALSE
+                       )
+em_ampvis2_obj2 <- amp_load(otutable = myotutable2, metadata = mymetadata2)
+```
+
+```{r}
+obj3 <- em_ps_soils
+t_otu3 <- t(data.frame(otu_table(obj3)))
+myotutable3 <- data.frame(OTU = rownames(t_otu3@.Data),
+                       t_otu3@.Data,
+                       phyloseq::tax_table(obj3)@.Data,
+                       check.names = FALSE
+                       )
+myotutable3$Species <- NA
+mymetadata3 <- data.frame(phyloseq::sample_data(obj3), 
+                       check.names = FALSE
+                       )
+edgar_ampvis2_obj3 <- amp_load(otutable = myotutable3, metadata = mymetadata3)
+```
+
+
+### Heatmap Visualization and Figure Creation
+
+#### Borheoles 2 + 3 Heatmap
+```{r}
+em_amp_heatmap <- amp_heatmap(em_ampvis2_obj,
+            group_by = "Collection_date",
+            facet_by = "Site_Collected_From",
+            tax_aggregate = "Order",
+            tax_add = c("Phylum", "Class"),
+            tax_empty = "remove",
+            tax_show = 15,
+            showRemainingTaxa = TRUE,
+            plot_colorscale = "sqrt",
+            function_data = TRUE,
+            plot_values = TRUE) +
+              theme(axis.text.x = element_text(angle = 0, size = 10, hjust = 0.5),
+                    axis.text.y = element_text(size = 12),
+                    legend.position = "right",
+                    legend.text = element_text(size = 10),
+                    legend.title = element_text(size = 10),
+                    strip.text.x = element_text(size = 12, face = "bold"),
+                    strip.background = element_rect(color = "black", size = 1.5, linetype = "solid"),
+                    panel.border = element_rect(color = "grey", fill = NA, size = 1)) 
+em_amp_heatmap
+```
+
+#### Boreholes 6 + 8 Heatmap
+```{r}
+em_amp_heatmap2 <- amp_heatmap(em_ampvis2_obj2,
+            group_by = "Collection_date",
+            facet_by = "Site_Collected_From",
+            tax_aggregate = "Order",
+            tax_add = c("Phylum", "Class"),
+            tax_empty = "remove",
+            tax_show = 15,
+            showRemainingTaxa = TRUE,
+            plot_colorscale = "sqrt",
+            function_data = TRUE,
+            plot_values = TRUE) +
+              theme(axis.text.x = element_text(angle = 0, size = 10, hjust = 0.5),
+                    axis.text.y = element_text(size = 12),
+                    legend.position = "right",
+                    legend.text = element_text(size = 10),
+                    legend.title = element_text(size = 10),
+                    strip.text.x = element_text(size = 12, face = "bold"),
+                    strip.background = element_rect(color = "black", size = 1.5, linetype = "solid"),
+                    panel.border = element_rect(color = "grey", fill = NA, size = 1)) 
+em_amp_heatmap2
+```
+
+#### Soils Heatmap
+```{r}
+em_amp_heatmap3 <- amp_heatmap(em_ampvis2_obj3,
+            group_by = "Collection_date",
+            facet_by = "Site_Collected_From",
+            tax_aggregate = "Order",
+            tax_add = c("Phylum", "Class"),
+            tax_empty = "remove",
+            tax_show = 15,
+            showRemainingTaxa = TRUE,
+            plot_colorscale = "sqrt",
+            function_data = TRUE,
+            plot_values = TRUE) +
+              theme(axis.text.x = element_text(angle = 0, size = 10, hjust = 0.5),
+                    axis.text.y = element_text(size = 12),
+                    legend.position = "right",
+                    legend.text = element_text(size = 10),
+                    legend.title = element_text(size = 10),
+                    strip.text.x = element_text(size = 12, face = "bold"),
+                    strip.background = element_rect(color = "black", size = 1.5, linetype = "solid"),
+                    panel.border = element_rect(color = "grey", fill = NA, size = 1)) 
+em_amp_heatmap3
+```
+
+### SIMPER Analysis
+```{r}
+em_ps_genus <- tax_glom(em_ps_rare_boreholes, taxrank = "Genus")
+
+metasimp_genus_em <- data.frame(sample_data(em_ps_genus))
+commsimp_genus_em <- data.frame(otu_table(em_ps_genus))
+```
+
+```{r}
+sim_borehole_genus_em <- with(metasimp_genus_em, simper(comm = commsimp_genus_em, group = Site_Collected_From))
+summary(sim_borehole_genus_em)
+```
+
+
+
+# Geochemistry Data
+
+### Loading the appropriate datasets containing the chemical and isotopic data from the study
+```{r}
+em_geochem <- read.csv("PCA_data.csv", row.names = 1)
+log_emgeochem <- log(em_geochem[,1:18])
+
+em_groupID <- read.csv("GroupID", row.names = 1)
+em_species <- em_groupID[,1]
+
+em_h20 <- read.csv("dH20_data.csv", header = TRUE)
+
+em_meta_lm <- read.csv("geochem_data.csv", row.names = 1) #The geochemistry data is reduced from the completed published data in the manuscript to include the analytes of interest from the study
+```
+
+
+### Creating the PCA Plot Figure
+
+Function for creating the biplot
+```{r}
+ggbiplot2 <- function (pcobj, choices = 1:2, scale = 1, pc.biplot = TRUE, 
+          obs.scale = 1 - scale, var.scale = scale, groups = NULL, 
+          ellipse = FALSE, ellipse.prob = 0.68, labels = NULL, labels.size = 3, 
+          alpha = 1, var.axes = TRUE, circle = FALSE, circle.prob = 0.69, 
+          varname.size = 3, varname.adjust = 1.5, varname.abbrev = FALSE, 
+          ...) 
+{
+  library(ggplot2)
+  library(plyr)
+  library(scales)
+  library(grid)
+  stopifnot(length(choices) == 2)
+  if (inherits(pcobj, "prcomp")) {
+    nobs.factor <- sqrt(nrow(pcobj$x) - 1)
+    d <- pcobj$sdev
+    u <- sweep(pcobj$x, 2, 1/(d * nobs.factor), FUN = "*")
+    v <- pcobj$rotation
+  }
+  else if (inherits(pcobj, "princomp")) {
+    nobs.factor <- sqrt(pcobj$n.obs)
+    d <- pcobj$sdev
+    u <- sweep(pcobj$scores, 2, 1/(d * nobs.factor), FUN = "*")
+    v <- pcobj$loadings
+  }
+  else if (inherits(pcobj, "PCA")) {
+    nobs.factor <- sqrt(nrow(pcobj$call$X))
+    d <- unlist(sqrt(pcobj$eig)[1])
+    u <- sweep(pcobj$ind$coord, 2, 1/(d * nobs.factor), FUN = "*")
+    v <- sweep(pcobj$var$coord, 2, sqrt(pcobj$eig[1:ncol(pcobj$var$coord), 
+                                                  1]), FUN = "/")
+  }
+  else if (inherits(pcobj, "lda")) {
+    nobs.factor <- sqrt(pcobj$N)
+    d <- pcobj$svd
+    u <- predict(pcobj)$x/nobs.factor
+    v <- pcobj$scaling
+    d.total <- sum(d^2)
+  }
+  else {
+    stop("Expected a object of class prcomp, princomp, PCA, or lda")
+  }
+  choices <- pmin(choices, ncol(u))
+  df.u <- as.data.frame(sweep(u[, choices], 2, d[choices]^obs.scale, 
+                              FUN = "*"))
+  v <- sweep(v, 2, d^var.scale, FUN = "*")
+  df.v <- as.data.frame(v[, choices])
+  names(df.u) <- c("xvar", "yvar")
+  names(df.v) <- names(df.u)
+  if (pc.biplot) {
+    df.u <- df.u * nobs.factor
+  }
+  r <- sqrt(qchisq(circle.prob, df = 2)) * prod(colMeans(df.u^2))^(1/4)
+  v.scale <- rowSums(v^2)
+  df.v <- r * df.v/sqrt(max(v.scale))
+  if (obs.scale == 0) {
+    u.axis.labs <- paste("standardized PC", choices, sep = "")
+  }
+  else {
+    u.axis.labs <- paste("PC", choices, sep = "")
+  }
+  u.axis.labs <- paste(u.axis.labs, sprintf("(%0.1f%% explained var.)", 
+                                            100 * pcobj$sdev[choices]^2/sum(pcobj$sdev^2)))
+  if (!is.null(labels)) {
+    df.u$labels <- labels
+  }
+  if (!is.null(groups)) {
+    df.u$groups <- groups
+  }
+  if (varname.abbrev) {
+    df.v$varname <- abbreviate(rownames(v))
+  }
+  else {
+    df.v$varname <- rownames(v)
+  }
+  df.v$angle <- with(df.v, (180/pi) * atan(yvar/xvar))
+  df.v$hjust = with(df.v, (1 - varname.adjust * sign(xvar))/2)
+  g <- ggplot(data = df.u, aes(x = xvar, y = yvar)) + xlab(u.axis.labs[1]) + 
+    ylab(u.axis.labs[2]) + coord_equal()
+  if (var.axes) {
+    if (circle) {
+      theta <- c(seq(-pi, pi, length = 50), seq(pi, -pi, 
+                                                length = 50))
+      circle <- data.frame(xvar = r * cos(theta), yvar = r * 
+                             sin(theta))
+      g <- g + geom_path(data = circle, color = muted("white"), 
+                         size = 1/2, alpha = 1/3)
+    }
+    g <- g + geom_segment(data = df.v, aes(x = 0, y = 0, 
+                                           xend = xvar, yend = yvar), arrow = arrow(length = unit(1/2, 
+                                                                                                  "picas")), color = "black")
+  }
+  if (!is.null(df.u$labels)) {
+    if (!is.null(df.u$groups)) {
+      g <- g + geom_text(aes(label = labels, color = groups), 
+                         size = labels.size)
+    }
+    else {
+      g <- g + geom_text(aes(label = labels), size = labels.size)
+    }
+  }
+  else {
+    if (!is.null(df.u$groups)) {
+      g <- g + geom_point(aes(color = groups), alpha = alpha)
+    }
+    else {
+      g <- g + geom_point(alpha = alpha)
+    }
+  }
+  if (!is.null(df.u$groups) && ellipse) {
+    theta <- c(seq(-pi, pi, length = 50), seq(pi, -pi, length = 50))
+    circle <- cbind(cos(theta), sin(theta))
+    ell <- ddply(df.u, "groups", function(x) {
+      if (nrow(x) <= 2) {
+        return(NULL)
+      }
+      sigma <- var(cbind(x$xvar, x$yvar))
+      mu <- c(mean(x$xvar), mean(x$yvar))
+      ed <- sqrt(qchisq(ellipse.prob, df = 2))
+      data.frame(sweep(circle %*% chol(sigma) * ed, 2, 
+                       mu, FUN = "+"), groups = x$groups[1])
+    })
+    names(ell)[1:2] <- c("xvar", "yvar")
+    g <- g + geom_path(data = ell, aes(color = groups, group = groups))
+  }
+  if (var.axes) {
+    g <- g + geom_text(data = df.v, aes(label = varname, 
+                                        x = xvar, y = yvar, angle = angle, hjust = hjust), 
+                       color = "black", size = varname.size)
+  }
+  return(g)
+}
+```
+
+
+```{r}
+em_pca <- prcomp(log_emgeochem, center = TRUE, scale. = TRUE)
+
+em_biplot <- ggbiplot2(em_pca, groups = em_species, obs.scale = 1, var.scale = 1, circle = FALSE, ellipse = FALSE, varname.size = 5, varname.adjust = 3) + 
+  geom_point(aes(fill = groups, shape = groups), size = 6) +
+  scale_fill_manual(values = c("#0072B2", "#F0E442", "#D55E00", "#CC79A7")) +
+  scale_shape_manual(values = c(21,22,23,24)) +
+  theme_bw()
+em_biplot
+```
+
+```{r}
+summary(em_pca)
+```
+
+
+### Creating Mn-Zn Linear Regression Figure
+```{r}
+em_linear_reg <- em_meta_lm %>%
+  ggplot(aes(x = Mn.257.610...A, y = Zn.213.857...A)) +
+  geom_point(mapping = aes(color = Site.Collected.From), size = 6) +
+  geom_smooth(method = "lm") +
+  labs(x = "Mn (ppm)", y = "Zn (ppm)", color = "") +
+  scale_color_manual(values = c("#0072B2", "#F0E442", "#E69F00","#009E73")) +
+  theme_bw() +
+  theme(axis.title.x = element_text(size = 16, face = "bold"), axis.title.y = element_text(size = 16, face = "bold"), axis.text.x = element_text(size = 12), axis.text.y = element_text(size = 12), legend.text = element_text(size = 15))
+em_linear_reg
+```
+
+
+#### Calculating P-value, Adjusted R-Squared value, and F-statistic
+```{r}
+Mn_Zn_lm <- lm(Mn.257.610...A ~ Zn.213.857...A, data = em_meta_lm)
+summary(Mn_Zn_lm)
+```
+
+
+### Creating Water-Isotope Figure
+
+```{r}
+em_H2O_isotopes_plot <- ggplot(data = em_h20) +
+  geom_point(mapping = aes(x = d_18O, y = d_2H, shape = Borehole, fill = Borehole), size = 6, position=position_jitter(h=0.65,w=0.45)) +
+  geom_abline(slope = 8, intercept = 10) +
+  geom_abline(slope = 8, intercept = 15, linetype = 2) +
+  geom_abline(slope = 8, intercept = 5, linetype = 2, color = "black") +
+  scale_shape_manual(values = c(21,22,24, 21, 22, 23, 25)) +
+  scale_fill_manual(values = c("#0072B2", "#F0E442", "#CC79A7", "#D55E00", "#E69F00", "#000000", "#009E73")) +
+  xlab(expression(paste(delta^{18}, "O(\u2030) VSMOW"))) + 
+  ylab(expression(paste(delta^{2}, "H(\u2030) VSMOW"))) +
+  labs(shape = "", fill = "") +
+  scale_x_continuous(limits = c(-20, -2), breaks = seq(-20, -2, by = 2)) +
+  scale_y_continuous(limits = c(-160,-10), breaks = seq(-160, -10, by = 15)) +
+  theme_classic() +
+  theme(axis.title = element_text(size = 20), axis.text = element_text(size = 15), legend.text = element_text(size = 15), legend.position = c(0.7, 0.2))
+em_H2O_isotopes_plot
+```
